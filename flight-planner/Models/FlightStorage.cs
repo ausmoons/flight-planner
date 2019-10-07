@@ -23,7 +23,6 @@ namespace flight_planner.Models
             _flights = new SynchronizedCollection<Flight>();
             _id = 1;
         }
-
         
         public static Flight[] GetFlights()
         {

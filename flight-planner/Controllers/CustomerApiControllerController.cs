@@ -7,25 +7,27 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using flight_planner.Models;
+using flight_planner.services;
 using WebGrease.Css.Extensions;
 
 namespace flight_planner.Controllers
 {
-    public class CustomerApiControllerController : ApiController
-    { 
+    public class CustomerApiControllerController : BaseApiController
+    {
 
-        [HttpGet]
-        [Route("api/FlightSearchRequest/{id}")]
-        public async Task<HttpResponseMessage> Get(HttpRequestMessage request, int id)
-        {
-            var flight = FlightStorage.GetFlightById(id);
-            if (flight == null)
-            {
-                request.CreateResponse(HttpStatusCode.NotFound);
-            }
 
-            return request.CreateResponse(HttpStatusCode.OK, flight);
-        }
+        //[HttpGet]
+        //[Route("api/flights/{id}")]
+        //public async Task<HttpResponseMessage> Get(HttpRequestMessage request, int id)
+        //{
+        //    var flight = FlightStorage.GetFlightById(id);
+        //    if (flight == null)
+        //    {
+        //        request.CreateResponse(HttpStatusCode.NotFound);
+        //    }
+
+        //    return request.CreateResponse(HttpStatusCode.OK, flight);
+        //}
 
         
         // GET: api/CustomerApiController
@@ -37,44 +39,36 @@ namespace flight_planner.Controllers
         // GET: api/CustomerApiController/5
         [HttpGet]
         [Route("api/airports")]
-        public AirportRequest[] GetAirports(string search)
+        public async Task<IHttpActionResult> GetAirports(string search)
         {
-            var flights = FlightStorage.GetFlights();
-            var result = new HashSet<AirportRequest>();
-            flights.ForEach(f =>
-            {
-                result.Add(f.From);
-                result.Add(f.To);
-            });
+            var airport = await _flightService.SearchAirports(search);
 
-            return result.Where(a => a.Airport.ToLower().Contains(search.ToLower().Trim()) ||
-                            a.City.ToLower().Contains(search.ToLower().Trim()) || 
-                            a.Country.ToLower().Contains(search.ToLower().Trim()))
-                .ToArray();
+            return Ok(airport.Select(ConvertAirportFromDomain).ToHashSet());
+
         }
 
 
         [HttpPost]
         [Route("api/flights/search")]
         // POST: api/CustomerApiController
-        public async Task<HttpResponseMessage> FlightSearch(HttpRequestMessage request, FlightSearchRequest search)
+        public async Task<IHttpActionResult> FlightSearch(FlightSearchRequest search)
         {
-            if (IsValid(search) && NotSameAirport(search))
-            {
-                var result = FlightStorage.GetFlights();
-                var matchedItems = result.Where(f => f.From.Airport.ToLower().Contains(search.From.ToLower()) ||
-                                                     f.To.Airport.ToLower().Contains(search.To.ToLower()) ||
+            if (!IsValid(search) || !NotSameAirport(search))
+                return BadRequest();
+            var result = await _flightService.GetFlights();
+            var matchedItems = result.Where(f => f.From.AirportCode.ToLower().Contains(search.From.ToLower()) ||
+                                                     f.To.AirportCode.ToLower().Contains(search.To.ToLower()) ||
                                                      DateTime.Parse(f.DepartureTime) ==
                                                      DateTime.Parse(search.DepartureDate)).ToList();
                 var response = new FlightSearchResult
                 {
-                    TotalItems = result.Length,
+                    TotalItems = matchedItems.Count,
                     Items = matchedItems,
                     Page = matchedItems.Any() ? 1 : 0
                 };
-                return request.CreateResponse(HttpStatusCode.OK, response);
-            }
-            return request.CreateResponse(HttpStatusCode.BadRequest);
+              
+            
+            return Ok(response);
         }
 
         private bool NotSameAirport(FlightSearchRequest search)
@@ -93,12 +87,12 @@ namespace flight_planner.Controllers
         [Route("api/flights/{id}")]
         public async Task<HttpResponseMessage> FlightSearchById(HttpRequestMessage request, int id)
         {
-            var flight = FlightStorage.GetFlightById(id);
+            var flight = await _flightService.GetFlightById(id);
             if (flight == null)
             {
-                return request.CreateResponse(HttpStatusCode.NotFound, flight);
+                return request.CreateResponse(HttpStatusCode.NotFound);
             }
-            return request.CreateResponse(HttpStatusCode.OK, flight);
+            return request.CreateResponse(HttpStatusCode.OK, ConvertFromDomain(flight));
         }
 
         // PUT: api/CustomerApiController/5
