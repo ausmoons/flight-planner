@@ -9,7 +9,7 @@ using flight_planner.Models;
 
 namespace flight_planner.data
 {
-    public class FlightPlannerDbContext : DbContext
+    public class FlightPlannerDbContext : DbContext , IFlightPlannerDbContext
     {
         public FlightPlannerDbContext() : base("flight-planner")
         {

@@ -1,16 +1,22 @@
 ﻿using System.Web.Http;
+using AutoMapper;
+using flight_planner.core.Services;
 using flight_planner.Models;
 using flight_planner.services;
 namespace flight_planner.Controllers
 {
-    public class BaseApiController : ApiController
+    public abstract class BaseApiController : ApiController
     {
-        public FlightService _flightService;
+        protected readonly IFlightService _flightService;
 
-        public BaseApiController()
+        protected readonly IMapper _mapper;
+
+        public BaseApiController(IFlightService flightService, IMapper mapper)
         {
-            _flightService = new FlightService();
+            _flightService = flightService;
+            _mapper = mapper;
         }
+
         protected Flight ConvertFlightToDomain(FlightRequest flightRequest)
         {
             return new Flight
@@ -23,7 +29,8 @@ namespace flight_planner.Controllers
                 DepartureTime = flightRequest.DepartureTime
             };
         }
-        protected Airport ConvertAirportToDomain(AirportRequest airportRequest)
+
+        private Airport ConvertAirportToDomain(AirportRequest airportRequest)
         {
             return new Airport
             {
@@ -32,6 +39,7 @@ namespace flight_planner.Controllers
                 AirportCode = airportRequest.Airport
             };
         }
+
         protected FlightRequest ConvertFromDomain(Flight flight)
         {
             return new FlightRequest
@@ -44,6 +52,7 @@ namespace flight_planner.Controllers
                 DepartureTime = flight.DepartureTime
             };
         }
+
         protected AirportRequest ConvertAirportFromDomain(Airport airport)
         {
             return new AirportRequest

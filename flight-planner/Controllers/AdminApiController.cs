@@ -9,87 +9,64 @@ using System.Web.Http;
 using flight_planner.Attribute;
 using flight_planner.Models;
 using flight_planner.services;
+using flight_planner.core.Services;
+using AutoMapper;
 
 namespace flight_planner.Controllers 
 {
     [BasicAuthentication]
     public class AdminApiController : BaseApiController
     {
-        private static readonly object ListLock = new object();
-
-        //private readonly FlightService _flightService;
-
-        public AdminApiController()
+   
+        public AdminApiController(IFlightService flightService, IMapper mapper) : base(flightService, mapper)
         {
-            _flightService = new FlightService();
         }
         // GET: api/AdminApi
-        public IEnumerable<string> Get()
+       /* public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
-        }
+        }*/
 
         // GET: api/AdminApi/5
         [HttpGet]
         [Route("admin-api/flights/{id}")]
-        //public  HttpResponseMessage Get(HttpRequestMessage request, int id)
-        public async Task<HttpResponseMessage> Get(HttpRequestMessage request, int id)
+      
+        public async Task<IHttpActionResult> Get(int id)
         {
             var flight = await _flightService.GetFlightById(id);
             if (flight == null)
             {
-                return request.CreateResponse(HttpStatusCode.NotFound, flight);
+                return NotFound();
             }
-            return request.CreateResponse(HttpStatusCode.OK, ConvertFromDomain(flight));
+            return Ok(_mapper.Map<FlightRequest>(flight));
         }
 
-        // POST: api/AdminApi
-        public void Post([FromBody]string value)
-        {
-        }
+
         [HttpPut]
         [Route("admin-api/flights")]
         // PUT: api/AdminApi/5
-        /*public async Task<IHttpActionResult> AddFlight( FlightRequest flight)
-        {
-            if (!IsValid(flight))
-            {
-                return BadRequest();
-            }
-            var result = await _flightService.AddFlight(ConvertFlightToDomain(flight));
-            if (!result.Succeeded)
-            {
-                return Conflict();
-            }
-            flight.Id = result.Id;
-            return Created(string.Empty, flight);
-        }*/
-
-
         public async Task<IHttpActionResult> AddFlight(FlightRequest flight)
         {
             if (!IsValid(flight))
             {
                 return BadRequest();
             }
-            lock (ListLock)
-            {
-                var result = _flightService.AddFlight(ConvertFlightToDomain(flight));
+            
+                var result = await _flightService.AddFlight(_mapper.Map<Flight>(flight));
                 if (!result.Succeeded)
                 {
                     return Conflict();
                 }
-                flight.Id = result.Id;
+                flight.Id = result.Entity.Id;
                 return Created(string.Empty, flight);
-            }
         }
 
         [HttpGet]
         [Route("admin-api/get/flights")]
         public async Task<IHttpActionResult> GetFlights()
         {
-            var flight = await _flightService.GetFlights();
-            return Ok(flight.Select(ConvertFromDomain).ToList());
+            var flights = await _flightService.GetFlight();
+            return Ok(flights.Select(f => _mapper.Map<FlightRequest>(f)).ToList());
         }
 
         private static bool IsValid(FlightRequest flight)
@@ -136,8 +113,7 @@ namespace flight_planner.Controllers
         // DELETE: api/AdminApi/5
         public async Task<HttpResponseMessage> Delete(HttpRequestMessage request, int id)
         {
-
-           await _flightService.RemoveFlightsById(id);
+           await _flightService.DeleteFlightById(id);
            return request.CreateResponse(HttpStatusCode.OK);
         }
     }
