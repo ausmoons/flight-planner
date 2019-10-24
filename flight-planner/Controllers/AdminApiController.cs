@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Web.Http;
 using flight_planner.Attribute;
 using flight_planner.Models;
-using flight_planner.services;
 using flight_planner.core.Services;
 using AutoMapper;
 
@@ -21,11 +18,7 @@ namespace flight_planner.Controllers
         public AdminApiController(IFlightService flightService, IMapper mapper) : base(flightService, mapper)
         {
         }
-        // GET: api/AdminApi
-       /* public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }*/
+        
 
         // GET: api/AdminApi/5
         [HttpGet]

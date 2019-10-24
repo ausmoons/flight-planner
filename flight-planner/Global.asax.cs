@@ -21,6 +21,7 @@ namespace flight_planner
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             GlobalConfiguration.Configuration.DependencyResolver = new StructureMapDependencyResolver(container);
+            //tas viss ļauj kontolierī padot konstruktorus
 
         }
     }

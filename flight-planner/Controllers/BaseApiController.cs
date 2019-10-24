@@ -2,7 +2,6 @@
 using AutoMapper;
 using flight_planner.core.Services;
 using flight_planner.Models;
-using flight_planner.services;
 namespace flight_planner.Controllers
 {
     public abstract class BaseApiController : ApiController

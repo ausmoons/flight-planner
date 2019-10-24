@@ -19,7 +19,6 @@ namespace flight_planner.DependencyResolution {
     using System;
     using System.Web.Mvc;
     using StructureMap;
-    using StructureMap.Configuration.DSL;
     using StructureMap.Graph;
     using StructureMap.Graph.Scanning;
     using StructureMap.Pipeline;
@@ -34,7 +33,7 @@ namespace flight_planner.DependencyResolution {
             }
         }
 
-        public void ScanTypes(TypeSet types, Registry registry)
+        public void ScanTypes(TypeSet types, Registry registry) //ja tas ir kontolieris un nav abstracts, tad tas ir unique per request
         {
             foreach(var type in types.AllTypes())
             {

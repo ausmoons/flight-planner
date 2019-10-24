@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace flight_planner.core.Services
+namespace flight_planner.core.Services //objekts, kurā pārbauda kāda bija darbība, kādas ir kļūdas
 {
    public class ServiceResult
     {
@@ -23,7 +23,7 @@ namespace flight_planner.core.Services
             Succeeded = succeeded;
         }
 
-        public ServiceResult(IEnumerable<string> errors)
+        public ServiceResult(IEnumerable<string> errors) //string kolekcija
         {
            Set(errors);
         }

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace flight_planner.core.Models
 {
-    public abstract class Entity : IEntity
+    public abstract class Entity : IEntity 
     {
-        public int Id { get; set; }
+        public int Id { get; set; } //kopīgā lieta abiem. Abstrakta, jo pašu neizmanto, bet no viņas manto
     }
 }

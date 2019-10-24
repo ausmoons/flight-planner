@@ -20,8 +20,6 @@ namespace flight_planner.DependencyResolution {
     using flight_planner.data;
     using flight_planner.services;
     using StructureMap;
-    using StructureMap.Configuration.DSL;
-    using StructureMap.Graph;
     using flight_planner.App_Start;
     using AutoMapper;
 
@@ -36,9 +34,9 @@ namespace flight_planner.DependencyResolution {
 					scan.With(new ControllerConvention());
                 });
             //For<IExample>().Use<Example>();
-            For<IFlightPlannerDbContext>().Use<FlightPlannerDbContext>().Transient();
+            For<IFlightPlannerDbContext>().Use<FlightPlannerDbContext>().Transient(); //kur izmanto katru interface.
             For<IDbService>().Use<DbService>();
-            For(typeof(IEntityService<>)).Use(typeof(EntityService<>));
+            For(typeof(IEntityService<>)).Use(typeof(EntityService<>));//visi interface ar visiem servisiem (airport, flight, entity)
             For<IFlightService>().Use<FlightService>();
             For<IAirportService>().Use<AirportService>();
             var mapper = AutoMapperConfig.GetMapper();

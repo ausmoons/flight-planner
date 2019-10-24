@@ -1,11 +1,10 @@
-﻿using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace flight_planner
 {
     public class FilterConfig
     {
-        public static void RegisterGlobalFilters(GlobalFilterCollection filters)
+        public static void RegisterGlobalFilters(GlobalFilterCollection filters) //ja ir pašu taisīts filts, tad šeit tie tiek ielikti
         {
             filters.Add(new HandleErrorAttribute());
         }

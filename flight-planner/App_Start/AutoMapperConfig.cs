@@ -1,15 +1,11 @@
 ﻿using AutoMapper;
 using flight_planner.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace flight_planner.App_Start
 {
     public class AutoMapperConfig
     {
-        public static IMapper GetMapper()
+        public static IMapper GetMapper() // konfigurācija kā mappot vienu objektu uz otru
         {
             var config = new MapperConfiguration(cfg =>
             {
@@ -19,7 +15,7 @@ namespace flight_planner.App_Start
                 cfg.CreateMap<FlightRequest, Flight>();
                 cfg.CreateMap<Flight, FlightRequest>();
             });
-            config.AssertConfigurationIsValid();
+            config.AssertConfigurationIsValid(); // liegta iespēja palaist prokjektu ar nevalīdu mapperu
             var mapper = config.CreateMapper();
             return mapper;
         }

@@ -3,7 +3,6 @@ using flight_planner.core.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using flight_planner.data;
 using System.Data.Entity;
@@ -16,10 +15,10 @@ namespace flight_planner.services
 
         public DbService(IFlightPlannerDbContext context)
         {
-            _ctx = context;
+            _ctx = context; //atspouļo datubāzi
         }
 
-        public ServiceResult Creat<T>(T entity) where T : Entity
+        public ServiceResult Creat<T>(T entity) where T : Entity //zem Entity ir arī flight un airport
         {
            if(entity == null)
             {
@@ -51,23 +50,22 @@ namespace flight_planner.services
             return Query<T>().ToList();
         }
 
-        public Task<T> GetById<T>(int id) where T : Entity
+        public virtual Task<T> GetById<T>(int id) where T : Entity //tagad var neizmantot virtual, bet nākotnē noderētu
         {
             return _ctx.Set<T>().SingleOrDefaultAsync(e => e.Id == id);
-
         }
 
-        public IQueryable<T> Query<T>() where T : Entity
+        public virtual IQueryable<T> Query<T>() where T : Entity
         {
             return _ctx.Set<T>().AsQueryable();
         }
 
-        public IQueryable<T> QueryById<T>(int id) where T : Entity
+        public virtual IQueryable<T> QueryById<T>(int id) where T : Entity
         {
             return Query<T>().Where(t => t.Id == id);
         }
 
-        public core.Services.ServiceResult Update<T>(T entity) where T : Entity
+        public ServiceResult Update<T>(T entity) where T : Entity
         {
             if (entity == null)
                 throw new ArgumentNullException("entity");

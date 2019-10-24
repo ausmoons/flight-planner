@@ -1,13 +1,10 @@
 ﻿using flight_planner.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace flight_planner.core.Services
 {
-   public interface IFlightService : IEntityService<Flight>
+   public interface IFlightService : IEntityService<Flight> //specifiskā lieta konkrētajam modelim
     {
         Task<IEnumerable<Flight>> GetFlight();
         Task<ServiceResult> AddFlight(Flight flight);

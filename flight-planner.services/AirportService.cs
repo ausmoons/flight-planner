@@ -1,11 +1,9 @@
 ﻿using flight_planner.core.Services;
 using flight_planner.data;
 using flight_planner.Models;
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace flight_planner.services

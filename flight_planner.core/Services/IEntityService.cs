@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace flight_planner.core.Services
 {
-    public interface IEntityService<T> where T : Entity
+    public interface IEntityService<T> where T : Entity //kopīgā lieta visiem, uzspiež savu gribu
     {
         IQueryable<T> Query();
         IQueryable<T> QueryById(int id);
