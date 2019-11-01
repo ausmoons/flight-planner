@@ -23,11 +23,6 @@ namespace flight_planner.Controllers
         {
             _flightService = new FlightService();
         }
-        // GET: api/AdminApi
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
         // GET: api/AdminApi/5
         [HttpGet]
