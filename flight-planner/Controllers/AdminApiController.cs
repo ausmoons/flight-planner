@@ -38,29 +38,6 @@ namespace flight_planner.Controllers
             return request.CreateResponse(HttpStatusCode.OK, ConvertFromDomain(flight));
         }
 
-        // POST: api/AdminApi
-        public void Post([FromBody]string value)
-        {
-        }
-        [HttpPut]
-        [Route("admin-api/flights")]
-        // PUT: api/AdminApi/5
-        /*public async Task<IHttpActionResult> AddFlight( FlightRequest flight)
-        {
-            if (!IsValid(flight))
-            {
-                return BadRequest();
-            }
-            var result = await _flightService.AddFlight(ConvertFlightToDomain(flight));
-            if (!result.Succeeded)
-            {
-                return Conflict();
-            }
-            flight.Id = result.Id;
-            return Created(string.Empty, flight);
-        }*/
-
-
         public async Task<IHttpActionResult> AddFlight(FlightRequest flight)
         {
             if (!IsValid(flight))
