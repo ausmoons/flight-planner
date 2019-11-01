@@ -17,8 +17,6 @@ namespace flight_planner.Controllers
     {
         private static readonly object ListLock = new object();
 
-        //private readonly FlightService _flightService;
-
         public AdminApiController()
         {
             _flightService = new FlightService();
