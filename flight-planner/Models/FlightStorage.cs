@@ -22,7 +22,6 @@ namespace flight_planner.Models
             return _flights.ToArray();
         }
 
-
         public static bool AddFlight(Flight flight)
         {
             lock (ListLock)
@@ -36,12 +35,10 @@ namespace flight_planner.Models
             }
         }
 
-
         public static void RemoveFlight(Flight flight)
          {
              _flights.Remove(flight);
          }
-
 
         public static Flight GetFlightById(int id)
         {
