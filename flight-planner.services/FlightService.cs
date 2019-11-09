@@ -9,7 +9,7 @@ namespace flight_planner.services
 {
    public class FlightService  : EntityService<Flight>, IFlightService
     {
-        //private static readonly object ListLock = new object();
+       
         public FlightService(IFlightPlannerDbContext contex) : base(contex) { }
        
 

@@ -20,7 +20,8 @@ namespace flight_planner.Controllers
             _airportService = airportService;
         }
 
-        // GET: api/CustomerApiController
+        [HttpGet]
+        [Route("api/flights")]
         public HttpResponseMessage Get(HttpRequestMessage request, int id)
         {
             lock (FlightStorage.GetFlights())
@@ -34,7 +35,7 @@ namespace flight_planner.Controllers
             }
         }
 
-        // GET: api/CustomerApiController/5
+
         [HttpGet]
         [Route("api/airports")]
         public async Task<IHttpActionResult> GetAirports(string search)
@@ -46,7 +47,6 @@ namespace flight_planner.Controllers
 
         [HttpPost]
         [Route("api/flights/search")]
-        // POST: api/CustomerApiController
         public async Task<IHttpActionResult> FlightSearch(FlightSearchRequest search)
         {
             if (!IsValid(search) || !NotSameAirport(search))

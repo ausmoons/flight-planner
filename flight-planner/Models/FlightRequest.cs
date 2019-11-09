@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace flight_planner.Models
+﻿namespace flight_planner.Models
 {
     public class FlightRequest
     {
@@ -14,8 +9,6 @@ namespace flight_planner.Models
             public string Carrier { get; set; }
             public string DepartureTime { get; set; }
             public string ArrivalTime { get; set; }
-
-
 
     }
 }

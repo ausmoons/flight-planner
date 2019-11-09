@@ -1,13 +1,11 @@
 ﻿using flight_planner.core.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace flight_planner.core.Services
 {
-    public interface IEntityService<T> where T : Entity //kopīgā lieta visiem, uzspiež savu gribu
+    public interface IEntityService<T> where T : Entity 
     {
         IQueryable<T> Query();
         IQueryable<T> QueryById(int id);

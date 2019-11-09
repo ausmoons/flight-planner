@@ -15,10 +15,10 @@ namespace flight_planner.services
 
         public DbService(IFlightPlannerDbContext context)
         {
-            _ctx = context; //atspouļo datubāzi
+            _ctx = context;
         }
 
-        public ServiceResult Creat<T>(T entity) where T : Entity //zem Entity ir arī flight un airport
+        public ServiceResult Creat<T>(T entity) where T : Entity 
         {
            if(entity == null)
             {
@@ -50,7 +50,7 @@ namespace flight_planner.services
             return Query<T>().ToList();
         }
 
-        public virtual Task<T> GetById<T>(int id) where T : Entity //tagad var neizmantot virtual, bet nākotnē noderētu
+        public virtual Task<T> GetById<T>(int id) where T : Entity 
         {
             return _ctx.Set<T>().SingleOrDefaultAsync(e => e.Id == id);
         }

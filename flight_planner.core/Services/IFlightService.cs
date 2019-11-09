@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace flight_planner.core.Services
 {
-   public interface IFlightService : IEntityService<Flight> //specifiskā lieta konkrētajam modelim
+   public interface IFlightService : IEntityService<Flight> 
     {
         Task<IEnumerable<Flight>> GetFlight();
         Task<ServiceResult> AddFlight(Flight flight);

@@ -20,10 +20,8 @@ namespace flight_planner.Controllers
         }
         
 
-        // GET: api/AdminApi/5
         [HttpGet]
-        [Route("admin-api/flights/{id}")]
-      
+        [Route("admin-api/flights/{id}")]     
         public async Task<IHttpActionResult> Get(int id)
         {
             var flight = await _flightService.GetFlightById(id);
@@ -37,7 +35,6 @@ namespace flight_planner.Controllers
 
         [HttpPut]
         [Route("admin-api/flights")]
-        // PUT: api/AdminApi/5
         public async Task<IHttpActionResult> AddFlight(FlightRequest flight)
         {
             if (!IsValid(flight))
@@ -103,7 +100,6 @@ namespace flight_planner.Controllers
 
         [HttpDelete]
         [Route("admin-api/flights/{id}")]
-        // DELETE: api/AdminApi/5
         public async Task<HttpResponseMessage> Delete(HttpRequestMessage request, int id)
         {
            await _flightService.DeleteFlightById(id);

@@ -1,13 +1,9 @@
 ﻿using flight_planner.core.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace flight_planner.core.Services //objekts, kurā pārbauda kāda bija darbība, kādas ir kļūdas
+namespace flight_planner.core.Services
 {
-   public class ServiceResult
+    public class ServiceResult
     {
 
         public bool Succeeded { get; private set; }
@@ -23,7 +19,7 @@ namespace flight_planner.core.Services //objekts, kurā pārbauda kāda bija dar
             Succeeded = succeeded;
         }
 
-        public ServiceResult(IEnumerable<string> errors) //string kolekcija
+        public ServiceResult(IEnumerable<string> errors) 
         {
            Set(errors);
         }
