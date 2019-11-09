@@ -1,12 +1,5 @@
-﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
-using System;
-using System.Collections;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Dynamic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 
 namespace flight_planner.Models
@@ -23,13 +16,11 @@ namespace flight_planner.Models
             _flights = new SynchronizedCollection<Flight>();
             _id = 1;
         }
-
         
         public static Flight[] GetFlights()
         {
             return _flights.ToArray();
         }
-
 
         public static bool AddFlight(Flight flight)
         {
@@ -44,12 +35,10 @@ namespace flight_planner.Models
             }
         }
 
-
         public static void RemoveFlight(Flight flight)
          {
              _flights.Remove(flight);
          }
-
 
         public static Flight GetFlightById(int id)
         {

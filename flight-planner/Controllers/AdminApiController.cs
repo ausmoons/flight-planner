@@ -1,75 +1,68 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Web.Http;
 using flight_planner.Attribute;
 using flight_planner.Models;
+using flight_planner.core.Services;
+using AutoMapper;
 
-namespace flight_planner.Controllers
+namespace flight_planner.Controllers 
 {
     [BasicAuthentication]
-    public class AdminApiController : ApiController
+    public class AdminApiController : BaseApiController
     {
-        private Random _random;
-     
-
-        public AdminApiController()
+   
+        public AdminApiController(IFlightService flightService, IMapper mapper) : base(flightService, mapper)
         {
-            _random = new Random();
         }
-        // GET: api/AdminApi
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        
 
         // GET: api/AdminApi/5
         [HttpGet]
         [Route("admin-api/flights/{id}")]
-        public HttpResponseMessage Get(HttpRequestMessage request, int id)
+      
+        public async Task<IHttpActionResult> Get(int id)
         {
-            var flight = FlightStorage.GetFlightById(id);
+            var flight = await _flightService.GetFlightById(id);
             if (flight == null)
             {
-                return request.CreateResponse(HttpStatusCode.NotFound, flight);
+                return NotFound();
             }
-
-            return request.CreateResponse(HttpStatusCode.OK, flight);
+            return Ok(_mapper.Map<FlightRequest>(flight));
         }
 
-        // POST: api/AdminApi
-        public void Post([FromBody]string value)
-        {
-        }
+
         [HttpPut]
         [Route("admin-api/flights")]
         // PUT: api/AdminApi/5
-        public async Task<HttpResponseMessage> AddFlight(HttpRequestMessage request, Flight flight)
+        public async Task<IHttpActionResult> AddFlight(FlightRequest flight)
         {
-
             if (!IsValid(flight))
             {
-                return request.CreateResponse(HttpStatusCode.BadRequest, flight);
+                return BadRequest();
             }
-
-
-            flight.Id = FlightStorage.GetId();
             
-
-            
-            if (!FlightStorage.AddFlight(flight))
-            {
-                return request.CreateResponse(HttpStatusCode.Conflict, flight);
-            }
-
-            return request.CreateResponse(HttpStatusCode.Created, flight);
+                var result = await _flightService.AddFlight(_mapper.Map<Flight>(flight));
+                if (!result.Succeeded)
+                {
+                    return Conflict();
+                }
+                flight.Id = result.Entity.Id;
+                return Created(string.Empty, flight);
         }
 
-        private static bool IsValid(Flight flight)
+        [HttpGet]
+        [Route("admin-api/get/flights")]
+        public async Task<IHttpActionResult> GetFlights()
+        {
+            var flights = await _flightService.GetFlight();
+            return Ok(flights.Select(f => _mapper.Map<FlightRequest>(f)).ToList());
+        }
+
+        private static bool IsValid(FlightRequest flight)
         {
 
             return !string.IsNullOrEmpty(flight.ArrivalTime) &&
@@ -89,11 +82,11 @@ namespace flight_planner.Controllers
                    !string.IsNullOrEmpty(airport.Country);
         }
 
-        private static bool IsDifferentAirport(AirportRequest airportFrom, AirportRequest airtportTo)
+        private static bool IsDifferentAirport(AirportRequest airportFrom, AirportRequest airportTo)
         {
-            return !airportFrom.Airport.ToLower().Equals(airtportTo.Airport.ToLower()) &&
-                   !airportFrom.City.ToLower().Equals(airtportTo.City.ToLower());
-            //!airportFrom.Country.ToLower().Equals(airtportTo.Country.ToLower());
+            return !airportFrom.Airport.ToLower().Equals(airportTo.Airport.ToLower()) &&
+                   !airportFrom.City.ToLower().Equals(airportTo.City.ToLower());
+           
         }
 
         private static bool ValidateDates(string departure, string arrival)
@@ -113,9 +106,8 @@ namespace flight_planner.Controllers
         // DELETE: api/AdminApi/5
         public async Task<HttpResponseMessage> Delete(HttpRequestMessage request, int id)
         {
-
-            FlightStorage.RemoveFlightById(id);
-            return request.CreateResponse(HttpStatusCode.OK);
+           await _flightService.DeleteFlightById(id);
+           return request.CreateResponse(HttpStatusCode.OK);
         }
     }
 }
